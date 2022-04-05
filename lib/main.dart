@@ -38,6 +38,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   final ScrollController _scrollController = ScrollController();
 
+  GlobalKey _logoKey = GlobalKey();
+
   double _welcomePageOpacity = 1.0;
   double _welcomePageLogoSize = 48;
 
@@ -46,6 +48,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     _scrollController.addListener(() {
       print("offset = ${_scrollController.offset}");
+      print(
+          "${_logoKey.currentContext?.findRenderObject()?.getTransformTo(null).getTranslation().y}");
       setState(() {
         _welcomePageOpacity = _getCurrentOpacity();
         _welcomePageLogoSize =
@@ -85,12 +89,15 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    "dev.jsds",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(1 - _welcomePageOpacity),
-                      fontWeight: FontWeight.bold,
-                      fontSize: 24,
+                  Container(
+                    child: Text(
+                      "dev.jsds",
+                      style: TextStyle(
+                        color:
+                            Colors.white.withOpacity(1 - _welcomePageOpacity),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 24,
+                      ),
                     ),
                   ),
                   Row(
@@ -142,12 +149,15 @@ class _MyHomePageState extends State<MyHomePage> {
                           direction: Axis.horizontal,
                           spacing: 10,
                           children: [
-                            Text(
-                              "dev.jsds",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                                fontSize: _welcomePageLogoSize,
+                            Container(
+                              key: _logoKey,
+                              child: Text(
+                                "dev.jsds",
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: _welcomePageLogoSize,
+                                ),
                               ),
                             ),
                             Text(
