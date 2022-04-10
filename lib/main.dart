@@ -1,24 +1,28 @@
 import 'package:dev_jsds/common/ui.dart';
+import 'package:dev_jsds/router/custom_route_information_parser.dart';
+import 'package:dev_jsds/router/custom_router_delegate.dart';
 import 'package:flutter/material.dart';
 
 void main() {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  late CustomRouterDelegate delegate;
+  late CustomRouteInformationParser informationParser;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      debugShowMaterialGrid: false,
-      title: 'dev.jsds',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'dev.jsds'),
+      routerDelegate: delegate,
+      routeInformationParser: informationParser,
     );
   }
 }
