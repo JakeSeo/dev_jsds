@@ -1,28 +1,22 @@
+import 'package:dev_jsds/data/content.dart';
+
 class PageConfiguration {
   final bool unknown;
-  final bool? projectsLoaded;
-  final bool? timelineListLoaded;
+  final Content? content;
 
   PageConfiguration.splash()
       : unknown = false,
-        projectsLoaded = false,
-        timelineListLoaded = false;
+        content = null;
 
-  PageConfiguration.home()
+  PageConfiguration.home({Content? content})
       : unknown = false,
-        projectsLoaded = true,
-        timelineListLoaded = true;
+        content = content;
 
   PageConfiguration.unknown()
       : unknown = true,
-        projectsLoaded = null,
-        timelineListLoaded = null;
+        content = null;
 
   bool get isUnknown => unknown == true;
-  bool get isSplashPage =>
-      unknown == false &&
-      projectsLoaded == false &&
-      timelineListLoaded == false;
-  bool get isHomePage =>
-      unknown == false && projectsLoaded == true && timelineListLoaded == true;
+  bool get isSplashPage => unknown == false && content == null;
+  bool get isHomePage => unknown == false && content != null;
 }

@@ -29,7 +29,8 @@ class CustomRouteInformationParser
     } else if (configuration.isSplashPage) {
       return null;
     } else if (configuration.isHomePage) {
-      return RouteInformation(location: '/');
+      return RouteInformation(
+          location: '/${configuration.content?.urlSection}');
     } else {
       return null;
     }

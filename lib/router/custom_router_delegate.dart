@@ -1,6 +1,9 @@
+import 'package:dev_jsds/data/content.dart';
 import 'package:dev_jsds/data/project.dart';
 import 'package:dev_jsds/data/repository/projects_repository.dart';
 import 'package:dev_jsds/router/page_configuration.dart';
+import 'package:dev_jsds/screen/home/home_screen.dart';
+import 'package:dev_jsds/screen/unknown_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../data/repository/timeline_list_repository.dart';
@@ -12,57 +15,41 @@ class CustomRouterDelegate extends RouterDelegate<PageConfiguration>
   final ProjectsRepository projectsRepository;
   final TimelineListRepository timelineListRepository;
 
-  bool? _show404;
-  bool? get show404 => _show404;
-  set show404(bool? value) {
-    _show404 = value;
-    if (value == true) {
-      _projectsLoaded = false;
-      _timelineListLoaded = false;
-    }
-    notifyListeners();
-  }
+  final ValueNotifier<Content?> _contentNotifier = ValueNotifier(null);
+  final ValueNotifier<bool?> _unknownStateNotifier = ValueNotifier(null);
 
-  List<Project>? _projects;
-  List<Project>? get projects => _projects;
-  set projects(List<Project>? value) {
-    _projects = value;
-    notifyListeners();
-  }
+  late Page _homePage;
 
-  bool? _projectsLoaded;
-  bool? get projectsLoaded => _projectsLoaded;
-  set projectsLoaded(bool? value) {
-    _projectsLoaded = value;
-    notifyListeners();
-  }
-
-  List<Timeline>? _timelineList;
-  List<Timeline>? get timelineList => _timelineList;
-  set timelineList(List<Timeline>? value) {
-    _timelineList = value;
-    notifyListeners();
-  }
-
-  bool? _timelineListLoaded;
-  bool? get timelineListLoaded => _timelineListLoaded;
-  set timelineListLoaded(bool? value) {
-    _timelineListLoaded = value;
-    notifyListeners();
-  }
+  final List<Content> contents;
+  Content get defaultContent => contents.first;
 
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
-    throw UnimplementedError();
+    return Navigator(
+      key: navigatorKey,
+      pages: _unknownStateNotifier.value == true
+          ? [
+              MaterialPage(
+                key: ValueKey<String>("Unknown"),
+                child: UnknownScreen(),
+              )
+            ]
+          : [
+              _homePage,
+            ],
+      onPopPage: (route, result) {
+        if (!route.didPop(result)) return false;
+        return true;
+      },
+    );
   }
 
   @override
   PageConfiguration? get currentConfiguration {
-    if (show404 == true) {
+    if (_unknownStateNotifier.value == true) {
       return PageConfiguration.unknown();
-    } else if (projectsLoaded == true && timelineListLoaded == true) {
-      return PageConfiguration.home();
+    } else if (_contentNotifier.value != null) {
+      return PageConfiguration.home(content: _contentNotifier.value);
     } else {
       return null;
     }
@@ -71,37 +58,56 @@ class CustomRouterDelegate extends RouterDelegate<PageConfiguration>
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _navigatorKey;
 
-  CustomRouterDelegate(this.projectsRepository, this.timelineListRepository) {
+  CustomRouterDelegate(
+    this.contents,
+    this.projectsRepository,
+    this.timelineListRepository,
+  ) {
+    _homePage = MaterialPage(
+      key: ValueKey<String>("HomePage"),
+      child: HomeScreen(
+        contents: contents,
+        contentNotifier: _contentNotifier,
+      ),
+    );
+    Listenable.merge([
+      _contentNotifier,
+      _unknownStateNotifier,
+    ])
+      ..addListener(() {
+        print("notifying the router widget");
+        notifyListeners();
+      });
     _init();
   }
 
-  _init() async {
-    projects = await projectsRepository.fetchProjects();
-    projectsLoaded = projects != null;
-    timelineList = await timelineListRepository.fetchTimelineList();
-    timelineListLoaded = timelineList != null;
-  }
+  _init() async {}
 
   @override
   Future<void> setNewRoutePath(PageConfiguration configuration) async {
     if (configuration.isUnknown) {
-      show404 = true;
+      _unknownStateNotifier.value = true;
+      _contentNotifier.value = null;
     } else if (configuration.isSplashPage) {
-      show404 = false;
-      projectsLoaded = false;
-      timelineListLoaded = false;
     } else if (configuration.isHomePage) {
-      show404 = false;
-      projectsLoaded = true;
-      timelineListLoaded = true;
+      _unknownStateNotifier.value = false;
+      Content? currentContent = configuration.content;
+      _contentNotifier.value = Content(
+        koreanName: currentContent != null
+            ? currentContent.koreanName
+            : defaultContent.koreanName,
+        englishName: currentContent != null
+            ? currentContent.englishName
+            : defaultContent.englishName,
+        urlSection: currentContent != null
+            ? currentContent.urlSection
+            : defaultContent.urlSection,
+        source: ContentSource.fromBrowserAddressBar,
+      );
     } else {
       print('Could not set new route');
     }
   }
 
-  _clear() {
-    show404 = null;
-    projectsLoaded = null;
-    timelineListLoaded = null;
-  }
+  _clear() {}
 }

@@ -68,29 +68,37 @@ class _ContentSectionsState extends State<ContentSections> {
   }
 
   Widget _getContent(index) {
-    switch (index) {
+    print(index);
+    print(ContentIndex.flutter.index);
+    switch (ContentIndex.values[index]) {
       case ContentIndex.home:
         return Container(
-          child: Text("v"),
+          height: 1000,
+          child: Text("home"),
         );
       case ContentIndex.flutter:
         return Container(
+          height: 500,
           child: Text("flutter"),
         );
       case ContentIndex.info:
         return Container(
+          height: 500,
           child: Text("info"),
         );
       case ContentIndex.timeline:
         return Container(
+          height: 500,
           child: Text("timeline"),
         );
       case ContentIndex.projects:
         return Container(
+          height: 500,
           child: Text("projects"),
         );
       case ContentIndex.thankyou:
         return Container(
+          height: 500,
           child: Text("thankyou"),
         );
     }
