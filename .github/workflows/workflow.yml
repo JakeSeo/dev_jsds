@@ -17,8 +17,6 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release
-        # 1. change path which exist lib/main.dart
-        working-directory: ./dev_jsds
       - run: |
           # 2. change path to [existed lib/main.dart path]/build/web
           cd dev_jsds/build/web
