@@ -17,7 +17,7 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release
-      - run: |
+      - run: 
           # 2. change path to [existed lib/main.dart path]/build/web
           cd dev_jsds/build/web
           git init
