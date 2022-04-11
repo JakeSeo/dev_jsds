@@ -38,7 +38,7 @@ class _MyAppState extends State<MyApp> {
       projectsRepository,
       timelineListRepository,
     );
-    informationParser = CustomRouteInformationParser();
+    informationParser = CustomRouteInformationParser(contents: _contents);
   }
 
   @override

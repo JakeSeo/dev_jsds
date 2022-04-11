@@ -2,20 +2,20 @@ import 'package:dev_jsds/data/content.dart';
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
-class ContentSections extends StatefulWidget {
+class ContentSection extends StatefulWidget {
   final List<Content>? contents;
   final ValueNotifier<Content?> contentNotifier;
-  const ContentSections({
+  const ContentSection({
     Key? key,
     required this.contents,
     required this.contentNotifier,
   }) : super(key: key);
 
   @override
-  State<ContentSections> createState() => _ContentSectionsState();
+  State<ContentSection> createState() => _ContentSectionState();
 }
 
-class _ContentSectionsState extends State<ContentSections> {
+class _ContentSectionState extends State<ContentSection> {
   /// Controller to scroll or jump to a particular item.
   final ItemScrollController _itemScrollController = ItemScrollController();
 

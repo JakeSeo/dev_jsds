@@ -1,9 +1,12 @@
+import 'package:dev_jsds/data/content.dart';
 import 'package:flutter/material.dart';
 
 import 'page_configuration.dart';
 
 class CustomRouteInformationParser
     extends RouteInformationParser<PageConfiguration> {
+  final List<Content> contents;
+  CustomRouteInformationParser({required this.contents});
   @override
   Future<PageConfiguration> parseRouteInformation(
       RouteInformation routeInformation) async {
@@ -12,8 +15,9 @@ class CustomRouteInformationParser
       return PageConfiguration.home();
     } else if (uri.pathSegments.length == 1) {
       final first = uri.pathSegments[0].toLowerCase();
-      if (first == 'home') {
-        return PageConfiguration.home();
+      int index = _getIndexOfURLSection(first);
+      if (index >= 0) {
+        return PageConfiguration.home(content: contents[index]);
       } else {
         return PageConfiguration.unknown();
       }
@@ -34,5 +38,13 @@ class CustomRouteInformationParser
     } else {
       return null;
     }
+  }
+
+  int _getIndexOfURLSection(String urlSection) {
+    final List<String?> urlSections = contents.map((e) {
+      return e.urlSection;
+    }).toList();
+
+    return urlSections.indexOf(urlSection);
   }
 }

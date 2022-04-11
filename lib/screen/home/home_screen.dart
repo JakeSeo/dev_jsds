@@ -1,7 +1,7 @@
 import 'package:dev_jsds/data/content.dart';
 import 'package:dev_jsds/data/project.dart';
 import 'package:dev_jsds/data/timeline.dart';
-import 'package:dev_jsds/screen/home/components/content_sections.dart';
+import 'package:dev_jsds/screen/home/components/content_section.dart';
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +19,7 @@ class HomeScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-            child: ContentSections(
+            child: ContentSection(
               contents: contents,
               contentNotifier: contentNotifier,
             ),
