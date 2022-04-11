@@ -17,10 +17,9 @@ jobs:
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release
-        working-directory: ./example_macos
       - run: |
           # 2. change path to [existed lib/main.dart path]/build/web
-          cd example_macos/build/web
+          cd build/web
           git init
            # 3. change your email
           git config --global user.email dev.jsds@gmail.com
