@@ -1,4 +1,4 @@
-name: dev.jsds
+name: Flutter Web
 on:
   push:
     branches:
@@ -10,10 +10,10 @@ jobs:
       my_secret: $
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v1
+      - uses: actions/checkout@v2
       - uses: subosito/flutter-action@v1
         with:
-          channel: 'dev'
+          channel: 'stable'
       - run: flutter config --enable-web
       - run: flutter pub get
       - run: flutter build web --release
