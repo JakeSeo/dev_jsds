@@ -24,10 +24,10 @@
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="dev_jsds">
-  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+  <link rel="apple-touch-icon" href="./dev_jsds/icons/Icon-192.png">
 
   <!-- Favicon -->
-  <link rel="icon" type="image/png" href="favicon.png"/>
+  <link rel="icon" type="image/png" href="./dev_jsds/favicon.png"/>
 
   <title>dev.jsds</title>
   <link rel="manifest" href="./dev_jsds/manifest.json">
@@ -56,7 +56,7 @@
         // Wait for registration to finish before dropping the <script> tag.
         // Otherwise, the browser will load the script multiple times,
         // potentially different versions.
-        var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+        var serviceWorkerUrl = './dev_jsds/flutter_service_worker.js?v=' + serviceWorkerVersion;
         navigator.serviceWorker.register(serviceWorkerUrl)
           .then((reg) => {
             function waitForActivation(serviceWorker) {
