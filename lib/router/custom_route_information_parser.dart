@@ -39,12 +39,12 @@ class CustomRouteInformationParser
   @override
   RouteInformation? restoreRouteInformation(PageConfiguration configuration) {
     if (configuration.isUnknown) {
-      return RouteInformation(location: '/dev_jsds/unknown');
+      return RouteInformation(location: '/unknown');
     } else if (configuration.isSplashPage) {
       return null;
     } else if (configuration.isHomePage) {
       return RouteInformation(
-          location: '/dev_jsds/${configuration.content?.urlSection}');
+          location: '/${configuration.content?.urlSection}');
     } else {
       return null;
     }
