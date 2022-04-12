@@ -21,6 +21,16 @@ class CustomRouteInformationParser
       } else {
         return PageConfiguration.unknown();
       }
+    } else if (uri.pathSegments.length == 2) {
+      final first = uri.pathSegments[0].toLowerCase();
+      final second = uri.pathSegments[0].toLowerCase();
+      print(first + " " + second);
+      int index = _getIndexOfURLSection(second);
+      if (index >= 0) {
+        return PageConfiguration.home(content: contents[index]);
+      } else {
+        return PageConfiguration.unknown();
+      }
     } else {
       return PageConfiguration.unknown();
     }
@@ -29,12 +39,12 @@ class CustomRouteInformationParser
   @override
   RouteInformation? restoreRouteInformation(PageConfiguration configuration) {
     if (configuration.isUnknown) {
-      return RouteInformation(location: '/unknown');
+      return RouteInformation(location: '/dev_jsds/unknown');
     } else if (configuration.isSplashPage) {
       return null;
     } else if (configuration.isHomePage) {
       return RouteInformation(
-          location: '/${configuration.content?.urlSection}');
+          location: '/dev_jsds/${configuration.content?.urlSection}');
     } else {
       return null;
     }
