@@ -75,7 +75,6 @@ class CustomRouterDelegate extends RouterDelegate<PageConfiguration>
       _unknownStateNotifier,
     ])
       ..addListener(() {
-        print("notifying the router widget");
         notifyListeners();
       });
     _init();

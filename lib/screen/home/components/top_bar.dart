@@ -8,8 +8,7 @@ class TopBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: UI().generateWidth(100),
-      height: 100,
-      color: Colors.red,
+      height: 70,
       child: Container(child: Text("this is top bar")),
     );
   }

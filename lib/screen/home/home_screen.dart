@@ -1,3 +1,4 @@
+import 'package:dev_jsds/common/ui.dart';
 import 'package:dev_jsds/data/content.dart';
 import 'package:dev_jsds/data/project.dart';
 import 'package:dev_jsds/data/timeline.dart';
@@ -16,6 +17,7 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    UI().setContext(context);
     return Scaffold(
       body: Column(
         children: [
