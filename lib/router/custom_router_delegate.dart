@@ -1,6 +1,7 @@
 import 'package:dev_jsds/data/content.dart';
 import 'package:dev_jsds/data/project.dart';
 import 'package:dev_jsds/data/repository/projects_repository.dart';
+import 'package:dev_jsds/page/splash_page.dart';
 import 'package:dev_jsds/router/page_configuration.dart';
 import 'package:dev_jsds/screen/home/home_screen.dart';
 import 'package:dev_jsds/screen/unknown_screen.dart';
@@ -23,20 +24,38 @@ class CustomRouterDelegate extends RouterDelegate<PageConfiguration>
   final List<Content> contents;
   Content get defaultContent => contents.first;
 
+  List<Page> get _splashStack {
+    String? process = "";
+    if (_contentNotifier.value == null) {
+      process = "Loading stuff...";
+    }
+    return [
+      SplashPage(process: process),
+    ];
+  }
+
+  List<Page> get _unknownStack => [
+        MaterialPage(
+          key: ValueKey<String>("Unknown"),
+          child: UnknownScreen(),
+        )
+      ];
+
   @override
   Widget build(BuildContext context) {
+    List<Page> stack;
+    if (_unknownStateNotifier.value == true) {
+      stack = _unknownStack;
+    } else if (_contentNotifier.value == null) {
+      stack = _splashStack;
+    } else {
+      stack = [
+        _homePage,
+      ];
+    }
     return Navigator(
       key: navigatorKey,
-      pages: _unknownStateNotifier.value == true
-          ? [
-              MaterialPage(
-                key: ValueKey<String>("Unknown"),
-                child: UnknownScreen(),
-              )
-            ]
-          : [
-              _homePage,
-            ],
+      pages: stack,
       onPopPage: (route, result) {
         if (!route.didPop(result)) return false;
         return true;
@@ -48,6 +67,8 @@ class CustomRouterDelegate extends RouterDelegate<PageConfiguration>
   PageConfiguration? get currentConfiguration {
     if (_unknownStateNotifier.value == true) {
       return PageConfiguration.unknown();
+    } else if (_contentNotifier.value == null) {
+      return PageConfiguration.splash();
     } else if (_contentNotifier.value != null) {
       return PageConfiguration.home(content: _contentNotifier.value);
     } else {
@@ -80,7 +101,14 @@ class CustomRouterDelegate extends RouterDelegate<PageConfiguration>
     _init();
   }
 
-  _init() async {}
+  _init() async {
+    if (_contentNotifier.value == null) {
+      _contentNotifier.value =
+          await Future.delayed(const Duration(seconds: 3), () {
+        return contents[0];
+      });
+    }
+  }
 
   @override
   Future<void> setNewRoutePath(PageConfiguration configuration) async {
